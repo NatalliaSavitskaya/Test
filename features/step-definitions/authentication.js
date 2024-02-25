@@ -2,6 +2,7 @@ import { Given, When, Then } from '@wdio/cucumber-framework';
 import signInPage from '../page-objects/signin.page.js';
 import homePage from '../page-objects/home.page.js';
 import headerPage from '../page-objects/header.page.js';
+import authenticationPage from '../page-objects/authentication.page.js';
 import { users } from '../test-data/users.js';
 import AllureReporter from '@wdio/allure-reporter';
 
@@ -53,4 +54,9 @@ Given('I am not logged in', async function () {
         (await headerPage.signOutButton).click();
         homePage.open();
     }
+});
+
+Then('I am on the authentication page', async function () {
+    await expect(await authenticationPage.pageTitle)
+        .toHaveText(expect.stringContaining('AUTHENTICATION'));
 });
