@@ -1,7 +1,7 @@
-Feature: Remove the cart 
+Feature: Remove all items from the cart 
 
   @remove
-  Scenario: Logged in user can remove items from the cart
+  Scenario: Logged in user can remove all the items from the cart
     Given I am on the home page
     And I am logged in as Natallia
     When I select Women menu item

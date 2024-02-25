@@ -2,8 +2,8 @@ import { Given, When, Then } from '@wdio/cucumber-framework';
 import productsPage from '../page-objects/products.page.js';
 import productPage from '../page-objects/product.page.js';
 import shoppingcartsummaryPage from '../page-objects/shoppingcartsummary.page.js';
-import authenticationPage from '../page-objects/authentication.page.js';
 import homePage from '../page-objects/home.page.js';
+import headerPage from '../page-objects/header.page.js';
 import { parseSize } from '../utils/utils.js';
 import { parseColor } from '../utils/utils.js';
 import { randomNumber } from '../utils/utils.js';
@@ -55,7 +55,7 @@ When('I click the Proceed to Checkout button on the pop-up window of the product
     await productPage.proceedToCheckoutButtonPopup.click();
 });
 
-Then('A correct order information is displayed', async function () {
+When('A correct order information is displayed', async function () {
     await expect(await shoppingcartsummaryPage.firstProductName)
         .toHaveText(this.productTitle);
 
@@ -89,6 +89,57 @@ Then('A correct order information is displayed', async function () {
 
 When('I click the Proceed to Checkout button on the shopping-cart summary page', async function () {
     await shoppingcartsummaryPage.proceedToCheckoutButton.click();
+});
+
+When('I add 1 product to my cart', async function () {
+    this.cartCounterBeforeAddingProduct = await headerPage.cartCounter.getText();
+    await productsPage.inStockFilter.click();
+    const lastNumber = await productsPage.allProductImages.length;
+    let randomInt = randomNumber(0, lastNumber - 1);
+    await productsPage.allProductImages[randomInt].click();
+    let avaliability = await productPage.availabilityValue.getText();
+    let foundInStock = false;
+    await browser.pause(1000);
+
+    for (let i = 0; i < await productPage.productColor.length; i++) {
+        await productPage.productColor[i].click();
+        await browser.pause(1000);
+        for (let j = 0; j < await productPage.productSizeOptions.length; j++) {
+            await productPage.productSizeSelector.selectByIndex(j);
+            await browser.pause(1000);
+            avaliability = await productPage.availabilityValue.getText();
+            if (avaliability == 'In stock') {
+                foundInStock = true;
+                break;
+            }
+        }
+        if (foundInStock) {
+            break;
+        }
+    }
+
+    await productPage.addToCartButton.click();
+    await browser.pause(1000);
+});
+
+Then('The counter on the cart is increased by 1', async function () {
+    let cartCounterAfterAddingProduct =  Number(this.cartCounterBeforeAddingProduct)+1;
+    await expect(await headerPage.cartCounter)
+        .toHaveText(cartCounterAfterAddingProduct.toString());
+});
+
+When('I remove 1 item from my cart', async function () {
+    await shoppingcartsummaryPage.open();
+    await browser.pause(1000);
+    await shoppingcartsummaryPage.firstRemoveItemButton.click();
+    await browser.pause(1000);
+});
+
+Then('The counter displays that the cart is empty', async function () {
+    await expect(await headerPage.cartCounter)
+        .toHaveText("");
+    await expect(await headerPage.emptyLabelCart)
+        .toHaveText("(empty)"); 
 });
 
 Then('I have no items in my cart', async function () {

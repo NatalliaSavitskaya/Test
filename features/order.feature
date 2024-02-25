@@ -4,7 +4,7 @@ Feature: Making an order by unregistered user
     Scenario: Unregistered user can't make an order without creating an account or signing in first
         Given I am on the home page
         And I am not logged in
-        # And I have no items in my cart
+        And I have no items in my cart
         When I select Women menu item
         And I mark "In stock" filter
         And I click on any product
@@ -14,7 +14,6 @@ Feature: Making an order by unregistered user
         And A correct order information is displayed
         And I click the Proceed to Checkout button on the shopping-cart summary page
         Then I am on the authentication page
-
 
 # Test Case 1
 # When an unregistered user tries to proceed with checkout after ordering some item, the page
