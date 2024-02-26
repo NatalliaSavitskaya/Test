@@ -1,7 +1,9 @@
 import { Page } from './page.js';
 import { browser } from '@wdio/globals';
 
-class shoppingCartSummaryPage extends Page {
+class shoppingCartPage extends Page {
+    get cartCounter(){return $('//div[@class="shopping_cart"]//span')} 
+    get emptyLabelCart() {return $(`.ajax_cart_no_product`)}
     get proceedToCheckoutButton() { return $(`#center_column .right`) }  //p/a[@title="Proceed to checkout"]
     get pageTitle() { return $('.page-heading'); }
     get firstRemoveItemButton() { return $('.icon-trash'); }
@@ -31,4 +33,4 @@ class shoppingCartSummaryPage extends Page {
     }
 }
 
-export default new shoppingCartSummaryPage();
+export default new shoppingCartPage();

@@ -1,20 +1,14 @@
 Feature: Making an order
 
 @order
-    Scenario: Unregistered user can't make an order without creating an account or signing in first
+    Scenario: Unregistered user can't make an order without creating an account
         Given I am on the home page
         And I am not logged in
-        # And I have no items in my cart
-        # When I select Women menu item
-        When I select any catalog menu item
-        And I mark "In stock" filter
-        And I click on any product
-        And I select avaliable size and color
-        And I click the Add to Card button
-        And I click the Proceed to Checkout button on the pop-up window of the product page
+        When I add 1 product to my cart
+        And I am on my shopping cart page
         And A correct order information is displayed
-        And I click the Proceed to Checkout button on the shopping-cart summary page
-        Then I am on the authentication page
+        And I click the Proceed to Checkout button
+        Then I am on the sign in page
 
 # Test Case 1
 # When an unregistered user tries to proceed with checkout after ordering some item, the page

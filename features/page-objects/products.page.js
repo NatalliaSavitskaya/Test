@@ -1,9 +1,16 @@
 import { Page } from './page.js';
 import { browser } from '@wdio/globals';
+import { randomNumber } from '../utils/utils.js';
 
 class productsPage extends Page {
     get inStockFilter() { return $(`//a[contains(text(),"In stock")]`); }
-    get allProductImages () {return $$(`//div[@class="product-image-container"]/a[1]`)}
+    get allProductImages() { return $$(`//div[@class="product-image-container"]/a[1]`) }
+
+    async selectRandomProduct() {
+        const amountOfProductImages = await this.allProductImages.length;
+        const randomIntegerForProduct = randomNumber(0, amountOfProductImages - 1);
+        await this.allProductImages[randomIntegerForProduct].click();
+    }
 }
 
 export default new productsPage();
