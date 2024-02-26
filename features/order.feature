@@ -18,6 +18,6 @@ Feature: Making an order
 Scenario: Logged in user can add several products to the cart and remove all of them
     Given I am on the home page
     And I am logged in as Natallia
-    When I add 3 products to my cart
+    When I add 5 products to my cart
     And I remove all products from the cart
     Then The counter displays that the cart is empty

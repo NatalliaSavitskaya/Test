@@ -9,7 +9,6 @@ import { parseColor } from '../utils/utils.js';
 
 When('I add 1 product to my cart', async function () {
     await menuPage.selectRandomMenuItem();
-    await browser.pause(2000);
     this.cartCounterBeforeAddingOneProduct = await shoppingCartPage.cartCounter.getText();
     await productsPage.inStockFilter.click();
     await productsPage.selectRandomProduct();
@@ -17,7 +16,6 @@ When('I add 1 product to my cart', async function () {
     let foundInStock = false;
     for (let i = 0; i < await productPage.productColors.length; i++) {
         await productPage.productColors[i].click();
-        await browser.pause(1000);
         for (let j = 0; j < await productPage.productSizeOptions.length; j++) {
             await productPage.productSizeSelector.selectByIndex(j);
             await browser.pause(1000);
@@ -37,7 +35,7 @@ When('I add 1 product to my cart', async function () {
             break;
         }
     }
-    await browser.pause(3000);
+    await browser.pause(2000);
     await productPage.addToCartButton.click();
     await browser.pause(2000);
     await productPage.closeButtonPopup.click();
@@ -91,9 +89,7 @@ When('I am on my shopping cart page', async function () {
 
 When('I remove 1 item from my cart', async function () {
     await shoppingCartPage.open();
-    await browser.pause(1000);
     await shoppingCartPage.firstRemoveItemButton.click();
-    await browser.pause(1000);
 });
 
 When('I add {word} products to my cart', async function (numberOfProducts) {
@@ -103,24 +99,21 @@ When('I add {word} products to my cart', async function (numberOfProducts) {
     else {
         for (let iteration = 1; iteration <= Number(numberOfProducts); iteration++) {
             await menuPage.selectRandomMenuItem();
-            await browser.pause(2000);
             await productsPage.inStockFilter.click();
             await productsPage.selectRandomProduct();
-            await browser.pause(1000);
             await productPage.selectFirstAvailableSizeAndColor();
+            await browser.pause(2000);
             await productPage.addToCartButton.click();
-            await browser.pause(3000);
+            await browser.pause(2000);
             await productPage.continueShoppingButtonPopup.click();
         }
         await shoppingCartPage.open();
-        await browser.pause(5000);
     }
 });
 
 When('I remove all products from the cart', async function () {
     await shoppingCartPage.open();
     await shoppingCartPage.removeAllProducts();
-    await homePage.open();
 });
 
 Then('The counter displays that the cart is empty', async function () {

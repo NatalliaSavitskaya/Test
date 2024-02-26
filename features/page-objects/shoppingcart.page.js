@@ -23,7 +23,6 @@ class shoppingCartPage extends Page {
         await browser.waitUntil(async() => {
             try {
                 await this.firstRemoveItemButton.waitForDisplayed({ timeout: 2000 });
-                console.log(`The cart is not empty`);
                 await this.firstRemoveItemButton.click();
                 return false;
             } catch {

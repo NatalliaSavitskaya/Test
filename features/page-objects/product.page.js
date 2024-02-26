@@ -21,7 +21,6 @@ class productPage extends Page {
         let foundInStock = false;
         for (let i = 0; i < await this.productColors.length; i++) {
             await this.productColors[i].click();
-            await browser.pause(1000);
             for (let j = 0; j < await this.productSizeOptions.length; j++) {
                 await this.productSizeSelector.selectByIndex(j);
                 await browser.pause(1000);
