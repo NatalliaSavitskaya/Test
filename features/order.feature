@@ -1,9 +1,11 @@
 Feature: Making an order
 
-  @order
-  Scenario: Unregistered user can't make an order without creating an account
+  Background: 
     Given I am on the home page
-    And I am not logged in
+
+  @order
+  Scenario: An unregistered user can't proceed with checkout after ordering some item without creating an account or signing in first
+    Given I am not logged in
     When I add 1 product to my cart
     And I am on my shopping cart page
     And A correct order information is displayed
@@ -12,8 +14,7 @@ Feature: Making an order
 
   @several
   Scenario: Logged in user can add several products to the cart and remove all of them
-    Given I am on the home page
-    And I am logged in as Natallia
+    Given I am logged in as Natallia
     When I add 2 products to my cart
     And I remove all products from the cart
     Then The counter displays that the cart is empty

@@ -1,7 +1,9 @@
 Feature: Searching by keyword
 
   @search
-  Scenario: Unregistered user can search for an approprite product based on entered keyword
+  Scenario: An unregistered user can search for a product using the entered keyword
+  // The keyword is searched only as part of the product title
+
     Given I am on the home page
     And I am not logged in
     When I fill in Printed in the search box

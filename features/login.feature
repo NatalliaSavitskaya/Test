@@ -1,7 +1,7 @@
 Feature: Login
 
   @login
-  Scenario: User can log in using valid credentials
+  Scenario: A registered user can log in with valid credentials
     Given I am on the home page
     And I am not logged in
     When I click on the Sign In button in the header
