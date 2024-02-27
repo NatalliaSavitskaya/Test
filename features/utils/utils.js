@@ -16,3 +16,8 @@ export function randomNumber(minNumber, maxNumber) {
     return Math.floor(Math.random() * (max - min + 1)) + min;   //random number in range [min,max]
 }
 
+export function priceStringToNumber(priceString) {
+    // priceString: $77.00 -> 77
+    const numberString = priceString.replace('$', '');
+    return Number(numberString);
+}

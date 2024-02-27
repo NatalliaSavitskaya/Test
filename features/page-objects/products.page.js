@@ -1,5 +1,4 @@
 import { Page } from './page.js';
-//import { browser } from '@wdio/globals';
 import { randomNumber } from '../utils/utils.js';
 
 class productsPage extends Page {

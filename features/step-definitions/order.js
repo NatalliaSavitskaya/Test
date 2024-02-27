@@ -5,6 +5,7 @@ import shoppingCartPage from '../page-objects/shoppingcart.page.js';
 import menuPage from '../page-objects/menu.page.js';
 import { parseSize } from '../utils/utils.js';
 import { parseColor } from '../utils/utils.js';
+import { priceStringToNumber } from '../utils/utils.js';
 
 When('I add 1 product to my cart', async function () {
     await menuPage.selectRandomMenuItem();
@@ -61,16 +62,38 @@ When('A correct order information is displayed', async function () {
         throw `ERROR: The color is incorrect!`;
     }
 
-    await expect(await shoppingCartPage.firstProductAmount)
+    await expect(await shoppingCartPage.firstProductQty)
         .toHaveValue(this.productAmount);
 
     if (this.productDiscount == "") {
-        await expect(shoppingCartPage.firstProductPrice)
+        await expect(await shoppingCartPage.firstProductUnitPrice)
             .toHaveText(this.productPrice);
+        const expectedfirstProductTotal =
+            await shoppingCartPage.firstProductQty.getValue() *
+            priceStringToNumber(await shoppingCartPage.firstProductUnitPrice.getText());
+
+        await expect(await shoppingCartPage.firstProductTotal)
+            .toHaveText(`$${expectedfirstProductTotal}`);
     } else {
-        await expect(shoppingCartPage.firstProductReducedPrice)
+        await expect(await shoppingCartPage.firstProductReducedPrice)
             .toHaveText(this.productPrice);
+        const expectedfirstProductTotalReducedPrice =
+            await shoppingCartPage.firstProductQty.getValue() *
+            priceStringToNumber(await shoppingCartPage.firstProductReducedPrice.getText());
+        await expect(await shoppingCartPage.firstProductTotal)
+            .toHaveText(`$${expectedfirstProductTotalReducedPrice}`);
     }
+
+    const expectedProductTotal = await shoppingCartPage.firstProductTotal.getText()
+    await expect(await shoppingCartPage.totalProducts)
+        .toHaveText(expectedProductTotal);
+
+    const expectedTotal =
+        priceStringToNumber(await shoppingCartPage.totalProducts.getText()) +
+        priceStringToNumber(await shoppingCartPage.totalShipping.getText());
+
+    await expect(await shoppingCartPage.total)
+        .toHaveText(`$${expectedTotal}`);
 });
 
 When('I click the Proceed to Checkout button', async function () {

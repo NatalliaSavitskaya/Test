@@ -1,5 +1,4 @@
 import { Page } from './page.js';
-//import { browser } from '@wdio/globals';
 import { randomNumber } from '../utils/utils.js';
 
 class menuPage extends Page {
@@ -8,7 +7,7 @@ class menuPage extends Page {
     async selectRandomMenuItem() {
         const amountOfCatalogMenuItems = await this.menuItems.length;
         const randomIntegerForMenuItems = randomNumber(0, amountOfCatalogMenuItems - 2); // the last menu item "Blog" is not a catalog
-        await this.menuItems[randomIntegerForMenuItems].click();      
+        await this.menuItems[randomIntegerForMenuItems].click();
     }
 }
 

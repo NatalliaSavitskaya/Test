@@ -27,4 +27,3 @@ Then('Each result contains entered keyword in each title', async function () {
         }
     }
 });
-

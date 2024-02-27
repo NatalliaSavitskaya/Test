@@ -1,5 +1,4 @@
 import { Page } from './page.js';
-//import { browser } from '@wdio/globals';
 
 class signInPage extends Page {
     get pageTitle() { return $('.page-heading'); }

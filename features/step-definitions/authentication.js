@@ -55,5 +55,5 @@ Then('I am on the sign in page', async function () {
     await expect(await signInPage.pageTitle)
         .toHaveText(expect.stringContaining('AUTHENTICATION'));
     await expect(await signInPage.createAnAccountSubtitle)
-        .toHaveText(expect.stringContaining('CREATE AN ACCOUNT'));      
+        .toHaveText(expect.stringContaining('CREATE AN ACCOUNT'));
 });
