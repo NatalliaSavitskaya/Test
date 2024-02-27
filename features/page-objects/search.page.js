@@ -1,5 +1,5 @@
 import { Page } from './page.js';
-import { browser } from '@wdio/globals';
+//import { browser } from '@wdio/globals';
 
 class searchPage extends Page {
     get searchInputField() {return $(`#search_query_top`)}

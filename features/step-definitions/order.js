@@ -2,7 +2,6 @@ import { Given, When, Then } from '@wdio/cucumber-framework';
 import productsPage from '../page-objects/products.page.js';
 import productPage from '../page-objects/product.page.js';
 import shoppingCartPage from '../page-objects/shoppingcart.page.js';
-import homePage from '../page-objects/home.page.js';
 import menuPage from '../page-objects/menu.page.js';
 import { parseSize } from '../utils/utils.js';
 import { parseColor } from '../utils/utils.js';
@@ -12,18 +11,19 @@ When('I add 1 product to my cart', async function () {
     this.cartCounterBeforeAddingOneProduct = await shoppingCartPage.cartCounter.getText();
     await productsPage.inStockFilter.click();
     await productsPage.selectRandomProduct();
-    let avaliability = await productPage.availabilityValue.getText();
     let foundInStock = false;
-    for (let i = 0; i < await productPage.productColors.length; i++) {
-        await productPage.productColors[i].click();
-        for (let j = 0; j < await productPage.productSizeOptions.length; j++) {
-            await productPage.productSizeSelector.selectByIndex(j);
-            await browser.pause(1000);
-            avaliability = await productPage.availabilityValue.getText();
-            if (avaliability == 'In stock') {
+    let numberOfColors = await productPage.productColors.length;
+    let numberOfSizeOptions = await productPage.productSizeOptions.length;
+    for (let colorCounter = 0; colorCounter < numberOfColors; colorCounter++) {
+        await productPage.productColors[colorCounter].click();
+        for (let sizeCounter = 1; sizeCounter <= numberOfSizeOptions; sizeCounter++) {
+            await productPage.productSizeSelector.click();
+            await productPage.productSizeSelector.selectByAttribute('value', sizeCounter.toString());
+            let avaliability = await productPage.availabilityValue.getText();
+            if (avaliability === 'In stock') {
                 this.productTitle = await productPage.productTitle.getText();
-                this.productSize = await productPage.productSizeOptions[j].getAttribute('title');
-                this.productColor = await productPage.productColors[i].getAttribute('name');
+                this.productSize = await productPage.productSizeOptions[sizeCounter - 1].getAttribute('title');
+                this.productColor = await productPage.productColors[colorCounter].getAttribute('name');
                 this.productAmount = await productPage.productQuantity.getAttribute('value');
                 this.productPrice = await productPage.productLastPrice.getText();
                 this.productDiscount = await productPage.productReductionPercent.getText();
@@ -35,9 +35,9 @@ When('I add 1 product to my cart', async function () {
             break;
         }
     }
-    await browser.pause(2000);
+    await browser.refresh(); // this was added to apply the selected Size and Color so that the Add to Card button appears
     await productPage.addToCartButton.click();
-    await browser.pause(2000);
+    await productPage.closeButtonPopup.waitForDisplayed({ timeout: 2000 });
     await productPage.closeButtonPopup.click();
 });
 
@@ -87,27 +87,30 @@ When('I am on my shopping cart page', async function () {
     await shoppingCartPage.open();
 });
 
+Given('I have no products in my cart', async function () {
+    await shoppingCartPage.open();
+    await shoppingCartPage.removeAllProducts();
+});
+
 When('I remove 1 item from my cart', async function () {
     await shoppingCartPage.open();
     await shoppingCartPage.firstRemoveItemButton.click();
 });
 
-When('I add {word} products to my cart', async function (numberOfProducts) {
+When('I add {int} products to my cart', async function (numberOfProducts) {
     if (numberOfProducts < 2) {
         throw `ERROR: The incorrect number of products is entered!`;
     }
     else {
-        for (let iteration = 1; iteration <= Number(numberOfProducts); iteration++) {
+        for (let iteration = 1; iteration <= numberOfProducts; iteration++) {
             await menuPage.selectRandomMenuItem();
             await productsPage.inStockFilter.click();
             await productsPage.selectRandomProduct();
             await productPage.selectFirstAvailableSizeAndColor();
-            await browser.pause(2000);
             await productPage.addToCartButton.click();
-            await browser.pause(2000);
+            await productPage.continueShoppingButtonPopup.waitForDisplayed({ timeout: 2000 });
             await productPage.continueShoppingButtonPopup.click();
         }
-        await shoppingCartPage.open();
     }
 });
 

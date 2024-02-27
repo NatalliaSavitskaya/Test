@@ -5,6 +5,31 @@ import headerPage from '../page-objects/header.page.js';
 import { users } from '../test-data/users.js';
 import AllureReporter from '@wdio/allure-reporter';
 
+Given('I am logged in as {word}', async function (name) {
+    if (!Object.keys(users).includes(name)) {
+        throw Error(`User ${name} is not recognized`);
+    }
+
+    const user = users[name];
+    AllureReporter.addArgument('user', user);
+
+    await headerPage.signInButton.click();
+    await signInPage.input("email").setValue(user.email);
+    await signInPage.input("passwd").setValue(user.password);
+    await signInPage.signInButton.click();
+    await expect(await headerPage.userFirstAndLastName)
+        .toHaveText(expect.stringContaining(`${user.firstname} ${user.lastname}`));
+});
+
+Given('I am not logged in', async function () {
+    if (await headerPage.signInButton.isDisplayed()) {
+        return true;
+    } else {
+        await headerPage.signOutButton.click();
+        homePage.open();
+    }
+});
+
 When('I click on the Sign In button in the header', async function () {
     await headerPage.signInButton.click();
 });
@@ -22,37 +47,8 @@ Then('I see in the header {string}', async function (userName) {
         .toHaveText(expect.stringContaining(userName));
 });
 
-Given('I am logged in as {word}', async function (name) {
-    if (!Object.keys(users).includes(name)) {
-        throw Error(`User ${name} is not recognized`);
-    }
-
-    const user = users[name];
-    AllureReporter.addArgument('user', user);
-
-    await headerPage.signInButton.click();
-    await signInPage.input("email").setValue(user.email);
-    await signInPage.input("passwd").setValue(user.password);
-    await signInPage.signInButton.click();
-    await expect(await headerPage.userFirstAndLastName)
-        .toHaveText(expect.stringContaining(`${user.firstname} ${user.lastname}`));
-});
-
 When('I click on the Sign Out button in the header', async function () {
     await headerPage.signOutButton.click();
-});
-
-Then('I see the Sign In button in the header', async function () {
-    await headerPage.signInButton.isDisplayed();
-});
-
-Given('I am not logged in', async function () {
-    if (await headerPage.signInButton.isDisplayed()) {
-        return true;
-    } else {
-        await headerPage.signOutButton.click();
-        homePage.open();
-    }
 });
 
 Then('I am on the sign in page', async function () {

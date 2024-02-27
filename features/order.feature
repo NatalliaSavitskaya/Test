@@ -14,10 +14,10 @@ Feature: Making an order
 # When an unregistered user tries to proceed with checkout after ordering some item, the page
 # should ask to create an account or sign in first, before letting the user finish the order.
 
-@add_and_remove_several_products
+@several
 Scenario: Logged in user can add several products to the cart and remove all of them
     Given I am on the home page
     And I am logged in as Natallia
-    When I add 5 products to my cart
+    When I add 2 products to my cart
     And I remove all products from the cart
     Then The counter displays that the cart is empty

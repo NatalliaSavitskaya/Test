@@ -1,5 +1,5 @@
 import { Page } from './page.js';
-import { browser } from '@wdio/globals';
+//import { browser } from '@wdio/globals';
 
 class headerPage extends Page {
     get signInButton() { return $('.login'); }

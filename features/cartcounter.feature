@@ -15,6 +15,7 @@ Feature: Displaying the correct number of items in the cart box
   Scenario: Removing one product from non-empty cart by unregistered user
     Given I am on the home page
     And I am not logged in
+    And I have no products in my cart
     When I add 1 product to my cart
     And I am on my shopping cart page
     And I remove 1 item from my cart
