@@ -38,6 +38,8 @@ When('I add 1 product to my cart', async function () {
     }
     await browser.refresh(); // this was added to apply the selected Size and Color so that the Add to Card button appears
     await productPage.addToCartButton.click();
+    await expect(await productPage.successfullMessage)
+        .toHaveText(expect.stringContaining("Product successfully added to your shopping cart"));
     await productPage.closeButtonPopup.waitForDisplayed({ timeout: 2000 });
     await productPage.closeButtonPopup.click();
 });
@@ -131,6 +133,8 @@ When('I add {int} products to my cart', async function (numberOfProducts) {
             await productsPage.selectRandomProduct();
             await productPage.selectFirstAvailableSizeAndColor();
             await productPage.addToCartButton.click();
+            await expect(await productPage.successfullMessage)
+                .toHaveText(expect.stringContaining("Product successfully added to your shopping cart"));
             await productPage.continueShoppingButtonPopup.waitForDisplayed({ timeout: 2000 });
             await productPage.continueShoppingButtonPopup.click();
         }

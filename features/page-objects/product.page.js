@@ -12,6 +12,7 @@ class productPage extends Page {
     get availabilityValue() { return $(`#availability_value`) }  // "In stock" label
     get addToCartButton() { return $('#add_to_cart button') }
     // Pop-up window:
+    get successfullMessage() { return $(`div[class*=layer_cart_product] h2`) }
     get continueShoppingButtonPopup() { return $(`.button-container .continue`) }
     get closeButtonPopup() { return $(`.cross`) }
 
