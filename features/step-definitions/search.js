@@ -20,8 +20,13 @@ Then('I see the search results', async function () {
 });
 
 Then('Each result contains entered keyword in each title', async function () {
+    // REVIEW:
+    // Be careful with using $$() without waiting. 
+    // If page loads slower, `searchPage.searchResults` will be an empty array.
     for (let i = 0; i < (await searchPage.searchResults.length); i++) {
         const textProductAttribute = await searchPage.searchResults[i].getText();
+        // REVIEW: It's preferred to use built-in assertion library "expect"
+        // Because it will show a better message than a custom thrown error
         if (!textProductAttribute.toLowerCase().includes(this.keyWord.toLowerCase())) {
             throw `ERROR: The search results are invalid!`;
         }
