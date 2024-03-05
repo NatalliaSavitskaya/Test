@@ -8,6 +8,14 @@ import { parseColor } from '../utils/utils.js';
 import { priceStringToNumber } from '../utils/utils.js';
 
 When('I add 1 product to my cart', async function () {
+    // REVIEW:
+    // In general this is great.
+    // Thumbs up for implementing random selection
+    // Thumbs up for checking options for availability
+    // What I would do is maybe split this into a smaller page object function to make it
+    //  a bit neater in this step definition file.
+    // Also it's a bit flaky. On some occasions it fails, but that's fine given the little time to make all of this.
+
     await menuPage.selectRandomMenuItem();
     this.cartCounterBeforeAddingOneProduct = await shoppingCartPage.cartCounter.getText();
     await productsPage.inStockFilter.click();
@@ -123,6 +131,8 @@ When('I remove 1 item from my cart', async function () {
 });
 
 When('I add {int} products to my cart', async function (numberOfProducts) {
+    // REVIEW:
+    // Is there a reason for not allowing to add 1 product with this function?
     if (numberOfProducts < 2) {
         throw `ERROR: The incorrect number of products is entered!`;
     }
